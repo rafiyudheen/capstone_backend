@@ -3,25 +3,23 @@ const USER_TYPE_MODEL = require("../../models/userTypeModel");
 
 async function getUserController(req, res) {
   // console.log("hitted");
-  await USER_MODEL.find({})
+  const userid=req.body.userId;
+  console.log(userid)
+  await USER_MODEL.findById(userid)
+  
     .then((doc) => {
       if (doc) {
-        // console.log(doc);
-        // let userData = { ...doc._doc };
-        if (doc.length > 0) {
-          let data = doc.map((user) => {
-            let { PASSWORD, USER_TYPE, ...rest } = user._doc;
-            return rest;
-          });
-          // console.log(data);
-          res.json(data);
-        } else res.status(400).json("No user data");
+                
+            let { PASSWORD, USER_TYPE,DELIVERY_ADDRESSES, ...rest } = doc._doc;
+            
+          res.json({data:rest});
+      
       } else {
         res.status(400).json("Error");
       }
     })
     .catch((err) => {
-      res.status(500).json(err);
+      res.status(err.status|| 500).json({message: err.message|| "internal Server Error"});
     });
 }
 
