@@ -138,9 +138,8 @@ const deactivateProduct = async (req, res) => {
 const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
-
-    const product = await productModel
-      .findById(id)
+    console.log(id);
+    const product = await PRODUCT_MODEL.findById(id)
       .populate("APPROVED_BY", "USER_NAME FULL_NAME")
       .populate("CATEGORY_ID", "CATEGORY_NAME");
 
@@ -163,9 +162,10 @@ const getProductsByCategory = async (req, res) => {
   try {
     const { categoryId } = req.params;
 
-    const products = await productModel
-      .find({ CATEGORY_ID: categoryId, ISACTIVE: true })
-      .populate("CATEGORY_ID", "CATEGORY_NAME");
+    const products = await PRODUCT_MODEL.find({
+      CATEGORY_ID: categoryId,
+      ISACTIVE: true,
+    }).populate("CATEGORY_ID", "CATEGORY_NAME");
 
     if (!products.length) {
       return res

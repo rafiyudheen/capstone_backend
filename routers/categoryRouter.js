@@ -1,5 +1,7 @@
 const express = require("express");
-const checkUserauthentication = require("../middleware/checkAuthentication");
+const {
+  checkUserauthentication,
+} = require("../middleware/checkAuthentication");
 const {
   createCategory,
   editCategory,
@@ -8,8 +10,8 @@ const {
 
 const categoryRouter = express.Router();
 
-categoryRouter.post("/category", checkUserauthentication, createCategory);
-categoryRouter.put("/category/:id", checkUserauthentication, editCategory);
-categoryRouter.get("/categories", checkUserauthentication, getAllCategories);
+categoryRouter.post("/addNew", checkUserauthentication, createCategory);
+categoryRouter.put("/edit", checkUserauthentication, editCategory);
+categoryRouter.get("/", getAllCategories);
 
 module.exports = categoryRouter;

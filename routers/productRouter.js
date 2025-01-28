@@ -1,5 +1,8 @@
 const express = require("express");
-const checkUserauthentication = require("../middleware/checkAuthentication");
+const {
+  checkUserauthentication,
+  checkUserSellerOrAdmin,
+} = require("../middleware/checkAuthentication");
 const {
   getAllActiveProducts,
   getNonActiveProducts,
@@ -12,16 +15,16 @@ const {
 
 const productRouter = express.Router();
 
-productRouter.get("/active", checkUserauthentication, getAllActiveProducts);
-productRouter.get("/inactive", checkUserauthentication, getNonActiveProducts);
-productRouter.get("/:id", checkUserauthentication, getProductById);
-productRouter.get(
-  "/category/:categoryId",
-  checkUserauthentication,
-  getProductsByCategory
+productRouter.get("/", getAllActiveProducts);
+productRouter.get("/inactive", checkUserSellerOrAdmin, getNonActiveProducts);
+productRouter.get("/:id", getProductById);
+productRouter.get("/category/:categoryId", getProductsByCategory);
+productRouter.post("/new", checkUserSellerOrAdmin, addProduct);
+productRouter.put("/edit", checkUserSellerOrAdmin, editProduct);
+productRouter.patch(
+  "/deactivate/:id",
+  checkUserSellerOrAdmin,
+  deactivateProduct
 );
-productRouter.post("/new", checkUserauthentication, addProduct);
-productRouter.put("/edit", checkUserauthentication, editProduct);
-productRouter.patch("/deactivate", checkUserauthentication, deactivateProduct);
 
 module.exports = productRouter;

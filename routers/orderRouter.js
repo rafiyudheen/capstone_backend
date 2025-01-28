@@ -1,6 +1,8 @@
 const express = require("express");
 const orderRouter = express.Router();
-const checkUserauthentication = require("../middleware/checkAuthentication");
+const {
+  checkUserauthentication,
+} = require("../middleware/checkAuthentication");
 const {
   addOrder,
   editOrder,
@@ -15,11 +17,19 @@ orderRouter.post("/add", checkUserauthentication, addOrder);
 orderRouter.put("/edit/:id", checkUserauthentication, editOrder);
 orderRouter.get("/", checkUserauthentication, getAllOrders);
 orderRouter.get("/:id", checkUserauthentication, getOrderById);
-orderRouter.put("/status/:id", checkUserauthentication, updateOrderStatus);
+orderRouter.put(
+  "/UpdateStatus/:id",
+  checkUserauthentication,
+  updateOrderStatus
+);
 orderRouter.get(
-  "/status-history/:id",
+  "/statusHistory/:id",
   checkUserauthentication,
   getStatusHistory
 );
-orderRouter.get("/byUserID", checkUserauthentication, getOrdersByUserId);
+orderRouter.get(
+  "/byUserID/:userId",
+  checkUserauthentication,
+  getOrdersByUserId
+);
 module.exports = orderRouter;

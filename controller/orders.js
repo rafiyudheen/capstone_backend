@@ -14,12 +14,14 @@ const addOrder = async (req, res) => {
       TRANSACTION_REF_ID,
     } = req.body;
 
+    console.log(req.body);
     const user = await USER_MODEL.findById(USER_ID);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     for (let item of ITEMS) {
+      console.log(item);
       const product = await PRODUCT_MODEL.findById(item.PRODUCT_ID);
       if (!product) {
         return res
@@ -44,9 +46,11 @@ const addOrder = async (req, res) => {
         },
       ],
     });
-
+    console.log(newOrder);
     const savedOrder = await newOrder.save();
-    res.status(201).json(savedOrder);
+    res
+      .status(201)
+      .json({ data: savedOrder, message: "order saved sucessfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -54,8 +58,13 @@ const addOrder = async (req, res) => {
 
 const editOrder = async (req, res) => {
   try {
-    const { ITEMS, DELIVERY_ADDRES, PAYMENT_MODE, TRANSACTION_REF_ID } =
-      req.body;
+    const {
+      ITEMS,
+      DELIVERY_ADDRES,
+      TOTAL_AMOUNT,
+      PAYMENT_MODE,
+      TRANSACTION_REF_ID,
+    } = req.body;
 
     const order = await ORDER_MODEL.findById(req.params.id);
     if (!order) {
@@ -69,10 +78,10 @@ const editOrder = async (req, res) => {
     }
 
     order.ITEMS = ITEMS || order.ITEMS;
-    order.DELIVERY_ADDRESS = DELIVERY_ADDRESS || order.DELIVERY_ADDRESS;
+    order.DELIVERY_ADDRES = DELIVERY_ADDRES || order.DELIVERY_ADDRES;
     order.PAYMENT_MODE = PAYMENT_MODE || order.PAYMENT_MODE;
     order.TRANSACTION_REF_ID = TRANSACTION_REF_ID || order.TRANSACTION_REF_ID;
-
+    order.TOTAL_AMOUNT = TOTAL_AMOUNT || order.TOTAL_AMOUNT;
     const updatedOrder = await order.save();
     res.status(200).json(updatedOrder);
   } catch (err) {

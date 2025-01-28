@@ -2,21 +2,22 @@ const CART_MODEL = require("../models/cartModel");
 
 const addToCart = async (req, res) => {
   try {
-    const items = req.body.items;
-    const userId = req.body.userId;
-    const totalAmount = req.body.amount;
+    const ITEMS = req.body.ITEMS;
+    const USER_ID = req.body.USER_ID;
+    const TOTAL_AMOUNT = req.body.TOTAL_AMOUNT;
 
-    let cart = await CART_MODEL.findOne({ USER_ID: userId });
+    let cart = await CART_MODEL.findOne({ USER_ID: USER_ID });
 
     if (!cart) {
       cart = new CART_MODEL({
-        USER_ID: userId,
-        ITEMS: items,
-        TOTAL_AMOUNT: totalAmount,
+        USER_ID: USER_ID,
+        ITEMS: ITEMS,
+        TOTAL_AMOUNT: TOTAL_AMOUNT,
       });
     } else {
-      cart.ITEMS = items;
-      cart.TOTAL_AMOUNT = totalAmount;
+      cart.USER_ID = USER_ID;
+      cart.ITEMS = ITEMS;
+      cart.TOTAL_AMOUNT = TOTAL_AMOUNT;
     }
 
     const updatedCart = await cart.save();
@@ -31,10 +32,11 @@ const getUserCart = async (req, res) => {
     const userId = req.params.userId;
 
     // Find the user's cart and populate the product details
-    const cart = await CART_MODEL.findOne({ USER_ID: userId }).populate(
-      "ITEMS.PRODUCT_ID",
-      "name price image"
-    ); // Populating product details like name, price, and image
+    const cart = await CART_MODEL.findOne({ USER_ID: userId });
+    // .populate(
+    //   "ITEMS.PRODUCT_ID",
+    //   "PRODUCT_NAME SELLING_PRICE PHOTOS"
+    // ); // Populating product details like name, price, and image
 
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });

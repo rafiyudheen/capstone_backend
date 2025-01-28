@@ -7,6 +7,7 @@ const CART_SCHEMA = new Schema({
   USER_ID: {
     type: Schema.Types.ObjectId,
     ref: USER_MODEL,
+    required: true,
   },
   ITEMS: [
     {
@@ -35,3 +36,5 @@ const CART_SCHEMA = new Schema({
 });
 
 const CART_MODEL = mongoose.model("cart", CART_SCHEMA);
+
+module.exports = CART_MODEL;

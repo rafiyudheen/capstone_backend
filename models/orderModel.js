@@ -73,3 +73,5 @@ const ORDERS_SCHEMA = new Schema({
 });
 
 const ORDER_MODEL = mongoose.model("orders", ORDERS_SCHEMA);
+
+module.exports = ORDER_MODEL;

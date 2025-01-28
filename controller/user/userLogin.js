@@ -10,20 +10,23 @@ async function userLogin(req, res, next) {
   await USER_MODEL.findOne({
     $or: [{ USER_NAME }, { MOBILE_NO: req.body.USER_NAME }],
   }).then((doc) => {
-    // console.log(doc.PASSWORD);
     if (!doc.IS_ACTIVE) {
       return res.status(401).json({ message: "User Not Active" });
     }
+    // console.log(doc);
     bcrypt.compare(userPassword, doc.PASSWORD, async function (err, result) {
       if (err) {
         return res
           .status(err.status || 500)
-          .json({ message: err.message || "Some Error Occured" });
+          .json({ message: err.message || "Error Occured" });
       }
 
       if (result) {
         var token = createToken(doc);
-        console.log(token);
+      } else {
+        return res
+          .status(400)
+          .json({ message: "UserName or Password incorrect" });
       }
       if (!token)
         return res.status(500).json({ message: "Some Error Occured" });
